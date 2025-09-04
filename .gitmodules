@@ -1,0 +1,6 @@
+[submodule "src/nera_bot"]
+	path = src/nera_bot
+	url = https://github.com/etogburn/nera_bot.git
+[submodule "src/ros2_nera_hardware_interface"]
+	path = src/ros2_nera_hardware_interface
+	url = https://github.com/etogburn/ros2_nera_hardware_interface.git
