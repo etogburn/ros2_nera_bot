@@ -1,27 +1,42 @@
 #!/bin/bash
 set -e
 
+# Service name
 SERVICE_NAME="ros2-compose.service"
 SERVICE_PATH="/etc/systemd/system/$SERVICE_NAME"
 
-echo "Installing $SERVICE_NAME..."
+# Determine the current folder (project folder)
+PROJECT_DIR="$(pwd)"
 
-# Copy service file
-if [ ! -f "$SERVICE_NAME" ]; then
-    echo "Error: $SERVICE_NAME not found in current directory."
-    exit 1
-fi
+echo "Creating systemd service file for ROS2 Docker Compose..."
+echo "Project directory detected as: $PROJECT_DIR"
 
-sudo cp "$SERVICE_NAME" "$SERVICE_PATH"
+# Generate the .service content
+SERVICE_CONTENT="[Unit]
+Description=ROS2 Docker Compose Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+WorkingDirectory=$PROJECT_DIR
+ExecStart=/usr/bin/docker compose up -d
+ExecStop=/usr/bin/docker compose down
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+"
+
+# Write the service file
+echo "$SERVICE_CONTENT" | sudo tee "$SERVICE_PATH" > /dev/null
 sudo chmod 644 "$SERVICE_PATH"
 
-# Reload systemd so it recognizes new service
+# Reload systemd and enable service
 sudo systemctl daemon-reload
-
-# Enable service at boot
 sudo systemctl enable "$SERVICE_NAME"
-
-# Start service now
 sudo systemctl start "$SERVICE_NAME"
 
 echo "$SERVICE_NAME installed and started successfully."

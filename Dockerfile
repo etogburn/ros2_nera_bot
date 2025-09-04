@@ -19,8 +19,6 @@ COPY ./src ./src
 # ======================
 FROM ros:jazzy-ros-base AS robot
 
-
-
 WORKDIR /ros2_ws
 COPY --from=base /ros2_ws /ros2_ws
 # COPY --from=base /opt/ros/jazzy /opt/ros/jazzy
@@ -31,8 +29,6 @@ RUN apt-get update && \
     rosdep update && \
     rosdep install --from-paths src --ignore-src -r -y && \
     colcon build
-
-
 
 # Source ROS and workspace on container start
 ENTRYPOINT ["/bin/bash", "-c", "source /opt/ros/jazzy/setup.bash && source /ros2_ws/install/setup.bash && exec bash"]
@@ -50,6 +46,12 @@ WORKDIR /ros2_ws
 COPY --from=base /ros2_ws /ros2_ws
 # COPY --from=base /opt/ros/jazzy /opt/ros/jazzy
 
+# Resolve dependencies and build
+RUN apt-get update && \
+    . /opt/ros/jazzy/setup.sh && \
+    rosdep update && \
+    rosdep install --from-paths src --ignore-src -r -y && \
+    colcon build
 
 # GUI env for RViz/Gazebo
 ENV QT_X11_NO_MITSHM=1

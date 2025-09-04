@@ -33,11 +33,25 @@ jobs:
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
 
-      - name: Build and push multi-arch image
+      - name: Build and push robot image
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
           platforms: linux/amd64,linux/arm64
+          target: robot
           tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ env.SHORT_SHA }}
+            ghcr.io/${{ github.repository }}:robot-latest
+            ghcr.io/${{ github.repository }}:robot-${{ github.sha }}
+
+      - name: Build and push dev image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          target: dev
+          tags: |
+            ghcr.io/${{ github.repository }}:dev-latest
+            ghcr.io/${{ github.repository }}:dev-${{ github.sha }}
+

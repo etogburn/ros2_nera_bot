@@ -3,11 +3,9 @@ version: "3.9"
 services:
   # Robot container (headless, no GUI tools)
   nera_robot:
-    build:
-      context: .
-      target: robot
-    image: nera_bot:robot
+    image: ghcr.io/etogburn/ros2_nera_bot:robot-latest
     network_mode: host
+    ipc: host
     privileged: true
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0   # example: motor controller
@@ -15,15 +13,13 @@ services:
     volumes:
       - ./src:/ros2_ws/src:rw
     command: >
-      bash -c "ros2 launch nera_bot bringup.launch.py"
+      bash -c "ros2 launch nera_bot launch_robot.launch.py"
 
   # Dev container (RViz, Gazebo, debugging)
   nera_dev:
-    build:
-      context: .
-      target: dev
-    image: nera_bot:dev
+    image: ghcr.io/etogburn/ros2_nera_bot:dev-latest
     network_mode: host
+    ipc: host
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
@@ -32,5 +28,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     devices:
       - /dev/dri:/dev/dri   # GPU passthrough for rendering
-    command: >
-      bash -c "ros2 launch nera_bot sim.launch.py"
+    # command: >
+    #   bash -c "ros2 launch nera_bot sim.launch.py"
+    profiles:
+      - dev
