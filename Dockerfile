@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 
 # Setup workspace
 WORKDIR /ros2_ws
-COPY ./src ./src
+COPY ./src ./
 
 
 # ======================
