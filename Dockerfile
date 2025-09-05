@@ -27,7 +27,7 @@ COPY --from=base /ros2_ws /ros2_ws
 RUN apt-get update && \
     . /opt/ros/jazzy/setup.sh && \
     rosdep update && \
-    rosdep install --from-paths src --ignore-src -r -y && \
+    rosdep install --from-paths . --ignore-src -r -y && \
     colcon build
 
 # Source ROS and workspace on container start
@@ -50,7 +50,7 @@ COPY --from=base /ros2_ws /ros2_ws
 RUN apt-get update && \
     . /opt/ros/jazzy/setup.sh && \
     rosdep update && \
-    rosdep install --from-paths src --ignore-src -r -y && \
+    rosdep install --from-paths . --ignore-src -r -y && \
     colcon build
 
 # GUI env for RViz/Gazebo
