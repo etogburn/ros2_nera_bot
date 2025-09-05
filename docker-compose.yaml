@@ -11,24 +11,26 @@ services:
       - /dev/ttyUSB0:/dev/ttyACM0   # example: motor controller
       - /dev/video0:/dev/video0     # example: camera
     volumes:
-      - ./src:/ros2_ws/src:rw
+      - /dev:/dev
+    device_cgroup_rules:
+      - 'c 189:* rmw'
     command: >
       bash -c "ros2 launch nera_bot launch_robot.launch.py"
 
   # Dev container (RViz, Gazebo, debugging)
-  nera_dev:
-    image: ghcr.io/etogburn/ros2_nera_bot:dev-latest
-    network_mode: host
-    ipc: host
-    environment:
-      - DISPLAY=${DISPLAY}
-      - QT_X11_NO_MITSHM=1
-    volumes:
-      - ./src:/ros2_ws/src:rw
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-    devices:
-      - /dev/dri:/dev/dri   # GPU passthrough for rendering
+  # nera_dev:
+  #   image: ghcr.io/etogburn/ros2_nera_bot:dev-latest
+  #   network_mode: host
+  #   ipc: host
+  #   environment:
+  #     - DISPLAY=${DISPLAY}
+  #     - QT_X11_NO_MITSHM=1
+  #   volumes:
+  #     - ./src:/ros2_ws/src:rw
+  #     - /tmp/.X11-unix:/tmp/.X11-unix:rw
+  #   devices:
+  #     - /dev/dri:/dev/dri   # GPU passthrough for rendering
     # command: >
     #   bash -c "ros2 launch nera_bot sim.launch.py"
-    profiles:
-      - dev
+    # profiles:
+    #   - dev

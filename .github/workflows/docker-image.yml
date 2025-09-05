@@ -41,19 +41,19 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
-          target: robot
+          # target: robot
           tags: |
             ghcr.io/${{ github.repository }}:robot-latest
             ghcr.io/${{ github.repository }}:robot-${{ github.sha }}
 
-      - name: Build and push dev image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          platforms: linux/amd64,linux/arm64
-          target: dev
-          tags: |
-            ghcr.io/${{ github.repository }}:dev-latest
-            ghcr.io/${{ github.repository }}:dev-${{ github.sha }}
+      # - name: Build and push dev image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     push: true
+      #     platforms: linux/amd64,linux/arm64
+      #     target: dev
+      #     tags: |
+      #       ghcr.io/${{ github.repository }}:dev-latest
+      #       ghcr.io/${{ github.repository }}:dev-${{ github.sha }}
 
